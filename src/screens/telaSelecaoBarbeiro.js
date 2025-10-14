@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Button, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Footer from '../components/footer';
@@ -12,14 +12,71 @@ const DADOS_BARBEIROS = [
   { id: '0', nome: 'Qualquer Profissional', fotoURL: 'https://via.placeholder.com/150/A9A9A9/FFFFFF?text=??', especialidade: 'Primeiro horário disponível' },
 ];
 
+const API_BASE_URL = 'http://192.168.1.107:3000'
 const TelaSelecaoBarbeiro = () => {
+
   const navigation = useNavigation();
   const route = useRoute();
-  
-  // O serviço selecionado da tela anterior
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+ // O serviço selecionado da tela anterior
   const { servico } = route.params; 
   
   const [barbeiroSelecionadoId, setBarbeiroSelecionadoId] = useState(null);
+  const [barbeiros, setBarbeiros] = useState([]);
+  
+
+
+  const fetchBarbeiros = async () =>{
+      
+    try{
+       setLoading(true);
+       setError(null);
+      
+      const response = await fetch(`${API_BASE_URL}/api/barbeiros`)
+      console.log('Response status:', response.status);
+      
+      // Lê o corpo apenas uma vez
+const text = await response.text();
+console.log('Conteúdo recebido (raw):', text);
+
+
+let result;
+try {
+  result = JSON.parse(text);
+} catch (e) {
+  throw new Error('Resposta não é JSON válida');
+}
+
+console.log('JSON parseado:', result);
+
+if (Array.isArray(result)) {
+  // ✅ API retorna um array diretamente
+  console.log('Barbeiros recebidos:', result);
+} else if (result && Array.isArray(result.data)) {
+  // ✅ API retorna { data: [...] }
+  console.log('Barbeiros recebidos:', result.data);
+  setBarbeiros(result.data);
+} else {
+  throw new Error('Formato de dados inválido');
+}
+
+
+    }catch(error){
+      console.log('Erro ao buscar barbeiros:', error);
+      Alert.alert('Erro', 'Não foi possível carregar os barbeiros. Tente novamente mais tarde.');
+    }finally{
+       setLoading(false);
+    }
+  };
+
+   // Buscar serviços quando a tela carregar
+    useEffect(() => {
+      fetchBarbeiros ();
+    }, []);
+  
+  
+ 
 
   const handleSelectBarber = (barberId) => {
     setBarbeiroSelecionadoId(barberId);
@@ -27,7 +84,7 @@ const TelaSelecaoBarbeiro = () => {
 
   const goToNextStep = () => {
     if (barbeiroSelecionadoId) {
-      const barbeiroCompleto = DADOS_BARBEIROS.find(b => b.id === barbeiroSelecionadoId);
+      const barbeiroCompleto = barbeiros.find(b => b.id === barbeiroSelecionadoId);
       
       navigation.navigate('SelecaoDataHora', { 
         servico: servico, 
@@ -62,7 +119,7 @@ const TelaSelecaoBarbeiro = () => {
       <Text style={styles.titulo}>Barbeiro para "{servico.nome}"</Text>
       
       <FlatList
-        data={DADOS_BARBEIROS}
+        data={barbeiros}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={{ paddingBottom: 100 }}

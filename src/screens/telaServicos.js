@@ -1,31 +1,122 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Supondo que você usa React Navigation
+import React, { useState, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  TouchableOpacity, 
+  StyleSheet, 
+  SafeAreaView, 
+  ActivityIndicator,
+  Alert 
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Footer from '../components/footer';
 
-// Dados de exemplo (Mockup de como viria do Backend)
-const DADOS_SERVICOS = [
-  { id: '1', nome: 'Corte Masculino', preco: 45.00, duracao: 40 },
-  { id: '2', nome: 'Barba Clássica', preco: 35.00, duracao: 30 },
-  { id: '3', nome: 'Completo (Corte + Barba)', preco: 75.00, duracao: 70 },
-  { id: '4', nome: 'Hidratação Capilar', preco: 25.00, duracao: 20 },
-];
+// URL base do seu servidor - IMPORTANTE ajustar conforme o ambiente
+const API_BASE_URL = 'http://192.168.1.107:3000' // Produção
 
-const TelaSelecaoServico  = () => {  
+const TelaSelecaoServico = () => {  
   const navigation = useNavigation();
   const [servicoSelecionadoId, setServicoSelecionadoId] = useState(null);
+  const [servicos, setServicos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Função para buscar serviços do backend
+  const fetchServicos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      console.log('Buscando serviços de:', `${API_BASE_URL}/api/servicos`);
+      const response = await fetch(`${API_BASE_URL}/api/servicos`);
+console.log('Status da resposta:', response.status);
+
+// Lê o corpo apenas uma vez
+const text = await response.text();
+console.log('Conteúdo recebido (raw):', text);
+
+let result;
+try {
+  result = JSON.parse(text);
+} catch (e) {
+  throw new Error('Resposta não é JSON válida');
+}
+
+console.log('JSON parseado:', result);
+
+if (Array.isArray(result)) {
+  // ✅ API retorna um array diretamente
+  setServicos(result);
+  console.log('Serviços recebidos:', result);
+} else if (result && Array.isArray(result.data)) {
+  // ✅ API retorna { data: [...] }
+  setServicos(result.data);
+  console.log('Serviços recebidos:', result.data);
+} else {
+  throw new Error('Formato de dados inválido');
+}
+
+
+      
+    } catch (err) {
+      console.error('Erro ao buscar serviços:', err);
+      setError(err.message);
+      Alert.alert(
+        'Erro de Conexão', 
+        'Não foi possível carregar os serviços. Verifique se o servidor está rodando.',
+        [{ text: 'Tentar Novamente', onPress: () => fetchServicos() }]
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Buscar serviços quando a tela carregar
+  useEffect(() => {
+    fetchServicos();
+  }, []);
 
   const handleSelectService = (serviceId) => {
     setServicoSelecionadoId(serviceId);
+    goToNextStep();
   };
 
   const goToNextStep = () => {
     if (servicoSelecionadoId) {
-      const servicoCompleto = DADOS_SERVICOS.find(s => s.id === servicoSelecionadoId);
-      // Navega para a próxima tela, passando o serviço
-      navigation.navigate('SelecaoBarbeiro', { servico: servicoCompleto });
+      const servicoCompleto = servicos.find(s => s.id === servicoSelecionadoId);
+      if (servicoCompleto) {
+        navigation.navigate('SelecaoBarbeiro', { servico: servicoCompleto });
+      }
     }
   };
+
+  // Componente de loading
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContent}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={styles.loadingText}>Carregando serviços...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // Componente de erro
+  if (error && servicos.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContent}>
+          <Text style={styles.errorText}>Erro ao carregar serviços</Text>
+          <Text style={styles.errorDetail}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={fetchServicos}>
+            <Text style={styles.retryButtonText}>Tentar Novamente</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   const renderItem = ({ item }) => {
     const isSelected = item.id === servicoSelecionadoId;
@@ -34,10 +125,14 @@ const TelaSelecaoServico  = () => {
       <TouchableOpacity
         style={[styles.card, isSelected && styles.selectedCard]}
         onPress={() => handleSelectService(item.id)}
+        
       >
         <View style={styles.infoContainer}>
           <Text style={styles.nomeServico}>{item.nome}</Text>
           <Text style={styles.detalheServico}>Duração: {item.duracao} min</Text>
+          {item.descricao && (
+            <Text style={styles.descricaoServico}>{item.descricao}</Text>
+          )}
         </View>
         <View style={styles.precoContainer}>
           <Text style={styles.preco}>R$ {item.preco.toFixed(2).replace('.', ',')}</Text>
@@ -51,41 +146,52 @@ const TelaSelecaoServico  = () => {
       <Text style={styles.titulo}>Selecione o Serviço</Text>
       
       <FlatList
-        data={DADOS_SERVICOS}
+        data={servicos}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={{ paddingBottom: 100 }} // Espaço para o botão
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Nenhum serviço disponível</Text>
+          </View>
+        }
       />
 
-      {servicoSelecionadoId && (
-       
-          <Footer onPress={goToNextStep} />
-      )}
+    
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#7cb9bbff' },
-  titulo: { fontSize: 22, fontWeight: 'bold', padding: 20, color: '#333' },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#f0ead6' 
+  },
+  titulo: { 
+    fontSize: 22, 
+    fontWeight: 'bold', 
+    padding: 20, 
+    color: '#333',
+    textAlign: 'center'
+  },
   card: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
     marginHorizontal: 15,
     marginVertical: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#B8860B',
     borderRadius: 8,
-    elevation: 2, // Sombra Android
-    shadowColor: '#000', // Sombra iOS
+    elevation: 2,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     borderWidth: 1,
-    borderColor: '#fff', // Borda padrão
+    borderColor: '#fff',
   },
   selectedCard: {
-    borderColor: '#007AFF', // Borda ao ser selecionado
+    borderColor: '#007AFF',
     borderWidth: 2,
   },
   infoContainer: {
@@ -94,12 +200,18 @@ const styles = StyleSheet.create({
   nomeServico: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#36332C',
   },
   detalheServico: {
     fontSize: 13,
-    color: '#666',
+    color:'#36332C',
     marginTop: 4,
+  },
+  descricaoServico: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 2,
+    fontStyle: 'italic',
   },
   precoContainer: {
     justifyContent: 'center',
@@ -108,9 +220,52 @@ const styles = StyleSheet.create({
   preco: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#007AFF',
+    color: '#F0EAD6',
   },
- 
+  centerContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#ff3b30',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  errorDetail: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  retryButton: {
+    backgroundColor: '#007AFF',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  emptyContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
 });
 
-export default TelaSelecaoServico ;
+export default TelaSelecaoServico;
