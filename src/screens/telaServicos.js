@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Footer from '../components/footer';
+import axios from 'axios';
 
 // URL base do seu servidor - IMPORTANTE ajustar conforme o ambiente
 const API_BASE_URL = 'http://192.168.1.107:3000' // Produção
@@ -27,50 +28,18 @@ const TelaSelecaoServico = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      console.log('Buscando serviços de:', `${API_BASE_URL}/api/servicos`);
-      const response = await fetch(`${API_BASE_URL}/api/servicos`);
-console.log('Status da resposta:', response.status);
-
-// Lê o corpo apenas uma vez
-const text = await response.text();
-console.log('Conteúdo recebido (raw):', text);
-
-let result;
-try {
-  result = JSON.parse(text);
-} catch (e) {
-  throw new Error('Resposta não é JSON válida');
-}
-
-console.log('JSON parseado:', result);
-
-if (Array.isArray(result)) {
-  // ✅ API retorna um array diretamente
-  setServicos(result);
-  console.log('Serviços recebidos:', result);
-} else if (result && Array.isArray(result.data)) {
-  // ✅ API retorna { data: [...] }
-  setServicos(result.data);
-  console.log('Serviços recebidos:', result.data);
-} else {
-  throw new Error('Formato de dados inválido');
-}
-
-
-      
-    } catch (err) {
-      console.error('Erro ao buscar serviços:', err);
-      setError(err.message);
-      Alert.alert(
-        'Erro de Conexão', 
-        'Não foi possível carregar os serviços. Verifique se o servidor está rodando.',
-        [{ text: 'Tentar Novamente', onPress: () => fetchServicos() }]
-      );
-    } finally {
+      const response = await axios.get(`${API_BASE_URL}/api/servicos`);
+      console.log('Serviços recebidos:', response.data);
+      setServicos(response.data);
       setLoading(false);
+    }catch (err) {
+      console.error('Erro ao buscar serviços:', err);
+      setError('Não foi possível carregar os serviços. Verifique sua conexão.');
+      Alert.alert('Erro', 'Não foi possível carregar os serviços', fetchServicos);
+      setServicos([]); // Limpa a lista em caso de erro
     }
-  };
+  }
+
 
   // Buscar serviços quando a tela carregar
   useEffect(() => {
@@ -123,7 +92,7 @@ if (Array.isArray(result)) {
     
     return (
       <TouchableOpacity
-        style={[styles.card, isSelected && styles.selectedCard]}
+        style={[styles.card, isSelected ]}
         onPress={() => handleSelectService(item.id)}
         
       >
