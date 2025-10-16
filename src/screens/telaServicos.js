@@ -7,7 +7,8 @@ import {
   StyleSheet, 
   SafeAreaView, 
   ActivityIndicator,
-  Alert 
+  Alert, 
+  ImageBackground
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Footer from '../components/footer';
@@ -23,6 +24,8 @@ const TelaSelecaoServico = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+   
+  const imageButton = require('../../assets/button02.png');
   // Função para buscar serviços do backend
   const fetchServicos = async () => {
     try {
@@ -48,17 +51,10 @@ const TelaSelecaoServico = () => {
 
   const handleSelectService = (serviceId) => {
     setServicoSelecionadoId(serviceId);
-    goToNextStep();
+    const servicoCompleto = servicos.find(s => s.id === serviceId);
+    navigation.navigate('SelecaoBarbeiro', { servico: servicoCompleto });
   };
 
-  const goToNextStep = () => {
-    if (servicoSelecionadoId) {
-      const servicoCompleto = servicos.find(s => s.id === servicoSelecionadoId);
-      if (servicoCompleto) {
-        navigation.navigate('SelecaoBarbeiro', { servico: servicoCompleto });
-      }
-    }
-  };
 
   // Componente de loading
   if (loading) {
@@ -91,11 +87,22 @@ const TelaSelecaoServico = () => {
     const isSelected = item.id === servicoSelecionadoId;
     
     return (
+      
+   
+   
       <TouchableOpacity
         style={[styles.card, isSelected ]}
         onPress={() => handleSelectService(item.id)}
         
       >
+
+      <ImageBackground
+        source={imageButton}
+        imageStyle={{ borderRadius: 10 }}
+        style={styles.gradient}
+      >
+     
+    
         <View style={styles.infoContainer}>
           <Text style={styles.nomeServico}>{item.nome}</Text>
           <Text style={styles.detalheServico}>Duração: {item.duracao} min</Text>
@@ -106,13 +113,18 @@ const TelaSelecaoServico = () => {
         <View style={styles.precoContainer}>
           <Text style={styles.preco}>R$ {item.preco.toFixed(2).replace('.', ',')}</Text>
         </View>
+         </ImageBackground>
+      
       </TouchableOpacity>
+   
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titulo}>Selecione o Serviço</Text>
+
+      <Text style={styles.titulo}> SERVIÇOS</Text>
+
       
       <FlatList
         data={servicos}
@@ -134,30 +146,40 @@ const TelaSelecaoServico = () => {
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: '#f0ead6' 
+    backgroundColor: '#ece0b6ff' 
   },
+  
+    gradient: {
+    borderRadius: 2,
+   // opcional
+    
+    width: '107%',
+    height: '100%',
+  },
+
   titulo: { 
     fontSize: 22, 
     fontWeight: 'bold', 
     padding: 20, 
-    color: '#333',
+    color: '#3d1502ff',
     textAlign: 'center'
   },
   card: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 15,
-    marginHorizontal: 15,
+    padding: 4,
+    marginHorizontal: 25,
     marginVertical: 8,
     backgroundColor: '#B8860B',
-    borderRadius: 8,
-    elevation: 2,
-    shadowColor: '#000',
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: '#130f0fff',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-    borderWidth: 1,
-    borderColor: '#fff',
+    borderWidth: 4,
+    borderColor: '#8a6533ff',
+    
   },
   selectedCard: {
     borderColor: '#007AFF',
@@ -165,37 +187,43 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
+  
   },
   nomeServico: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#36332C',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3a2902ff',
   },
   detalheServico: {
-    fontSize: 13,
-    color:'#36332C',
+    fontSize: 14,
+    color:'#fffcf6ff',
     marginTop: 4,
+    fontWeight: 'bold',
   },
   descricaoServico: {
-    fontSize: 12,
-    color: '#888',
+    fontSize: 14,
+    color: '#ffffffff',
     marginTop: 2,
     fontStyle: 'italic',
+    fontWeight: 'bold',
   },
   precoContainer: {
     justifyContent: 'center',
     alignItems: 'flex-end',
+    paddingRight: 30,
   },
   preco: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#F0EAD6',
+    color: '#f3eeebff',
+    alignItems: 'left',
+    marginRight: 10,
   },
   centerContent: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    justifyContent: 'top',
+    alignItems: 'left',
+    padding: 16,
   },
   loadingText: {
     marginTop: 10,

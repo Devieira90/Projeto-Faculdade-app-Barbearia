@@ -41,6 +41,7 @@ const TelaSelecaoDataHora = () => {
   const route = useRoute();
   
   const { servico, barbeiro } = route.params;
+  console.log('Serviço recebido:', route.params);
 
   // Estados
   const [dataSelecionada, setDataSelecionada] = useState(moment().format('YYYY-MM-DD'));

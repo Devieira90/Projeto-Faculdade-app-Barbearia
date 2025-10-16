@@ -1,16 +1,10 @@
 import React, { useState ,useEffect} from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Button, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Footer from '../components/footer';
 
-// Dados de exemplo (Mockup de como viria do Backend)
-const DADOS_BARBEIROS = [
-  { id: '101', nome: 'Carlos Silva', fotoURL: 'https://via.placeholder.com/150/007AFF/FFFFFF?text=CS', especialidade: 'Clássico e Barba' },
-  { id: '102', nome: 'André Santos', fotoURL: 'https://via.placeholder.com/150/FF6347/FFFFFF?text=AS', especialidade: 'Estilos Modernos (Fade)' },
-  { id: '103', nome: 'Bia Oliveira', fotoURL: 'https://via.placeholder.com/150/3CB371/FFFFFF?text=BO', especialidade: 'Coloração e Texturização' },
-  // Opção especial: "Qualquer" para facilitar a vida do usuário
-  { id: '0', nome: 'Qualquer Profissional', fotoURL: 'https://via.placeholder.com/150/A9A9A9/FFFFFF?text=??', especialidade: 'Primeiro horário disponível' },
-];
+
+
+import axios from 'axios';
 
 const API_BASE_URL = 'http://192.168.1.107:3000'
 const TelaSelecaoBarbeiro = () => {
@@ -24,6 +18,7 @@ const TelaSelecaoBarbeiro = () => {
   
   const [barbeiroSelecionadoId, setBarbeiroSelecionadoId] = useState(null);
   const [barbeiros, setBarbeiros] = useState([]);
+  const imageBarbeiro = require('../../assets/barbeiro.jpg');
   
 
 
@@ -32,34 +27,12 @@ const TelaSelecaoBarbeiro = () => {
     try{
        setLoading(true);
        setError(null);
-      
-      const response = await fetch(`${API_BASE_URL}/api/barbeiros`)
-      console.log('Response status:', response.status);
-      
-      // Lê o corpo apenas uma vez
-const text = await response.text();
-console.log('Conteúdo recebido (raw):', text);
-
-
-let result;
-try {
-  result = JSON.parse(text);
-} catch (e) {
-  throw new Error('Resposta não é JSON válida');
-}
-
-console.log('JSON parseado:', result);
-
-if (Array.isArray(result)) {
-  // ✅ API retorna um array diretamente
-  console.log('Barbeiros recebidos:', result);
-} else if (result && Array.isArray(result.data)) {
-  // ✅ API retorna { data: [...] }
-  console.log('Barbeiros recebidos:', result.data);
-  setBarbeiros(result.data);
-} else {
-  throw new Error('Formato de dados inválido');
-}
+        console.log('Buscando barbeiros...');
+        const response = await axios.get(`${API_BASE_URL}/api/barbeiros`);
+        console.log(response.status)
+        console.log('Barbeiros recebidos:', response.data);
+        setBarbeiros(response.data);
+    
 
 
     }catch(error){
@@ -78,45 +51,49 @@ if (Array.isArray(result)) {
   
  
 
-  const handleSelectBarber = (barberId) => {
-    setBarbeiroSelecionadoId(barberId);
-  };
+ 
+    
 
-  const goToNextStep = () => {
-    if (barbeiroSelecionadoId) {
-      const barbeiroCompleto = barbeiros.find(b => b.id === barbeiroSelecionadoId);
-      
-      navigation.navigate('SelecaoDataHora', { 
-        servico: servico, 
-        barbeiro: barbeiroCompleto 
-      });
-    }
-  };
+    const handleSelectBarber = (barberId) => {
+  setBarbeiroSelecionadoId(barberId);
+  const barbeiroCompleto = barbeiros.find(b => b.id === barberId);
+
+  navigation.navigate('SelecaoDataHora', { 
+    servico: servico, 
+    barbeiro: barbeiroCompleto 
+  });
+};
+
+    
+  
+
+
 
   const renderItem = ({ item }) => {
     const isSelected = item.id === barbeiroSelecionadoId;
     
     return (
       <TouchableOpacity
-        style={[styles.card, isSelected && styles.selectedCard]}
+        style={styles.card }
         onPress={() => handleSelectBarber(item.id)}
       >
         <Image 
-          source={{ uri: item.fotoURL }} 
+          source={imageBarbeiro} 
           style={styles.barberImage} 
         />
         <View style={styles.infoContainer}>
           <Text style={styles.nomeBarbeiro}>{item.nome}</Text>
           <Text style={styles.especialidade}>{item.especialidade}</Text>
         </View>
-        {isSelected && <Text style={styles.checkIcon}>✓</Text>}
+      
       </TouchableOpacity>
     );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titulo}>Barbeiro para "{servico.nome}"</Text>
+      
+      <Text style={styles.titulo}>PROFICIONAL :</Text>
       
       <FlatList
         data={barbeiros}
@@ -125,9 +102,7 @@ if (Array.isArray(result)) {
         contentContainerStyle={{ paddingBottom: 100 }}
       />
 
-      {barbeiroSelecionadoId && (
-         <Footer onPress={goToNextStep} />
-      )}
+      
     </SafeAreaView>
   );
 };
@@ -135,23 +110,23 @@ if (Array.isArray(result)) {
 // ... (Estilos, apenas os novos/modificados)
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8f8f8' },
+  container: { flex: 1, backgroundColor: '#f5e8c6ff' },
   titulo: { fontSize: 18, fontWeight: 'bold', padding: 15, color: '#333' }, // Reduzido para caber o nome do serviço
   card: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 15,
-    marginHorizontal: 15,
+    marginHorizontal: 25,
     marginVertical: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#7c672eff',
     borderRadius: 8,
-    elevation: 2, 
+    elevation: 5, 
     shadowColor: '#000', 
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    borderWidth: 1,
-    borderColor: '#fff',
+    shadowRadius: 2.22,
+    borderWidth: 4,
+    borderColor: '#251702ff',
   },
   selectedCard: {
     borderColor: '#007AFF',
@@ -168,13 +143,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nomeBarbeiro: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '600',
-    color: '#333',
+    color: '#fffafaff',
   },
   especialidade: {
-    fontSize: 13,
-    color: '#666',
+    fontSize: 20,
+    color: '#e7e3e3ff',
     marginTop: 4,
   },
   checkIcon: {
