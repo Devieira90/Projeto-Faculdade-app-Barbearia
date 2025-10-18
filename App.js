@@ -3,8 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import AppRoute from './src/routes/stackRoute';
 
 
-import BarberManagement from './src/screens/admin/barberManagement';
-import TelaAdm from './src/screens/telaAdm';
+
+import DashBoard from './src/screens/admin/dashBoard';
 
 
 
@@ -12,7 +12,7 @@ export default function App() {
   return (
    
 <AppRoute />
-
+//<DashBoard/>
    
   )
 }

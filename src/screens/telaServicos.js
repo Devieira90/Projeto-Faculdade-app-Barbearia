@@ -16,6 +16,11 @@ import axios from 'axios';
 
 // URL base do seu servidor - IMPORTANTE ajustar conforme o ambiente
 const API_BASE_URL = 'http://192.168.1.107:3000' // Produção
+const dadosMock = [
+  { id: 1, nome: 'Corte de Cabelo', duracao: 30, preco: 25.00, descricao: 'Corte tradicional masculino.' },
+  { id: 2, nome: 'Barba', duracao: 15, preco: 15.00, descricao: 'Aparar e modelar a barba.' },
+  { id: 3, nome: 'Corte Infantil', duracao: 25, preco: 20.00, descricao: 'Corte especial para crianças.' },
+];
 
 const TelaSelecaoServico = () => {  
   const navigation = useNavigation();
@@ -27,7 +32,7 @@ const TelaSelecaoServico = () => {
    
   const imageButton = require('../../assets/button02.png');
   // Função para buscar serviços do backend
-  const fetchServicos = async () => {
+  /*const fetchServicos = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -41,12 +46,14 @@ const TelaSelecaoServico = () => {
       Alert.alert('Erro', 'Não foi possível carregar os serviços', fetchServicos);
       setServicos([]); // Limpa a lista em caso de erro
     }
-  }
+  }*/
 
 
   // Buscar serviços quando a tela carregar
   useEffect(() => {
-    fetchServicos();
+    //fetchServicos();
+    setServicos(dadosMock);
+    setLoading(false);
   }, []);
 
   const handleSelectService = (serviceId) => {

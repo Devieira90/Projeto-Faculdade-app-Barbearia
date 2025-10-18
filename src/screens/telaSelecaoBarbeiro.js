@@ -7,6 +7,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
 const API_BASE_URL = 'http://192.168.1.107:3000'
+const dadosBarbeirosMock = [
+  { id: '1', nome: 'João Silva', especialidade: 'Cortes Masculinos' },
+  { id: '2', nome: 'Carlos Souza', especialidade: 'Barba e Bigode' },
+  { id: '3', nome: 'Pedro Oliveira', especialidade: 'Cortes Infantis' },
+];
 const TelaSelecaoBarbeiro = () => {
 
   const navigation = useNavigation();
@@ -20,9 +25,9 @@ const TelaSelecaoBarbeiro = () => {
   const [barbeiros, setBarbeiros] = useState([]);
   const imageBarbeiro = require('../../assets/barbeiro.jpg');
   
+// Função para buscar barbeiros da API DESCOMNETAR 
 
-
-  const fetchBarbeiros = async () =>{
+ /* const fetchBarbeiros = async () =>{
       
     try{
        setLoading(true);
@@ -41,11 +46,12 @@ const TelaSelecaoBarbeiro = () => {
     }finally{
        setLoading(false);
     }
-  };
+  };*/
 
    // Buscar serviços quando a tela carregar
     useEffect(() => {
-      fetchBarbeiros ();
+     // fetchBarbeiros ();
+      setBarbeiros(dadosBarbeirosMock);
     }, []);
   
   

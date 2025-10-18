@@ -1,7 +1,7 @@
 
 import { StyleSheet } from 'react-native';
 
- export const styles = StyleSheet.create({
+ export const Styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 80,
@@ -43,6 +43,18 @@ import { StyleSheet } from 'react-native';
     boxShadow:"4px",
     fontWeight:"bold"
 
+  },
+
+  btnTelaAdm:{
+    paddingBottom: 4,
+    marginHorizontal: 5,
+    borderRadius: 15,
+    backgroundColor:'#7fbcbeff',
+    color :'red',
+    alignItems:"center",
+    justifyContent:"center",
+    width:60,
+    height:60,
   }
 
 })
