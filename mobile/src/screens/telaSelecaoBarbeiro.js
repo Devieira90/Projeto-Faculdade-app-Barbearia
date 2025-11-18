@@ -128,7 +128,7 @@ const TelaSelecaoBarbeiro = () => {
   return (
     <SafeAreaView style={styles.container}>
       
-      <Text style={styles.titulo}>PROFICIONAL :</Text>
+      <Text style={styles.titulo}>PROFISSIONAL :</Text>
       
       <FlatList
         data={barbeiros}

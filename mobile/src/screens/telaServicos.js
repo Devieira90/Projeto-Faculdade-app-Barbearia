@@ -6,12 +6,10 @@ import {
   TouchableOpacity, 
   StyleSheet, 
 
-  ActivityIndicator,
-  Alert, 
-  ImageBackground
+  ActivityIndicator, Alert,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
-import Footer from '../components/footer';
 import axios from 'axios';
 import {collection,addDoc,getDocs} from 'firebase/firestore';
 import {db} from '../config/firebaseConfig';
@@ -75,11 +73,6 @@ const TelaSelecaoServico = () => {
       }
     };
 
-   
-  const imageButton = require('../../../assets/button02.png');
-
-
-
   // Buscar serviços quando a tela carregar
   useEffect(() => {
   
@@ -104,7 +97,7 @@ const TelaSelecaoServico = () => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#D4AF37" />
           <Text style={styles.loadingText}>Carregando serviços...</Text>
         </View>
       </SafeAreaView>
@@ -131,21 +124,11 @@ const TelaSelecaoServico = () => {
     
     return (
       
-   
-   
+      // O TouchableOpacity agora envolve toda a lógica do card
       <TouchableOpacity
-        style={[styles.card, isSelected ]}
+        style={[styles.card, isSelected && styles.cardSelected]}
         onPress={() => handleSelectService(item.id)}
-        
       >
-
-      <ImageBackground
-        source={imageButton}
-        imageStyle={{ borderRadius: 10 }}
-        style={styles.gradient}
-      >
-     
-    
         <View style={styles.infoContainer}>
           <Text style={styles.nomeServico}>{item.nome}</Text>
           <Text style={styles.detalheServico}>Duração: {item.duracao} min</Text>
@@ -156,8 +139,6 @@ const TelaSelecaoServico = () => {
         <View style={styles.precoContainer}>
           <Text style={styles.preco}>R$ {item.preco.toFixed(2).replace('.', ',')}</Text>
         </View>
-         </ImageBackground>
-      
       </TouchableOpacity>
    
     );
@@ -165,8 +146,16 @@ const TelaSelecaoServico = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-
-      <Text style={styles.titulo}> SERVIÇOS</Text>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity 
+          style={styles.headerButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Icon name="arrow-back" size={28} color="#7c672eff" />
+        </TouchableOpacity>
+        <Text style={styles.titulo}>Nossos Serviços</Text>
+        <View style={{ width: 44 }} />{/* Espaçador para centralizar o título */}
+      </View>
 
       
       <FlatList

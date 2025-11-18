@@ -1,9 +1,8 @@
-import { initializeApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import {getFirestore,serverTimestamp} from 'firebase/firestore';
-
-
-
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { getFirestore, serverTimestamp } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 
 const firebaseConfig = {
@@ -16,12 +15,19 @@ const firebaseConfig = {
   measurementId: "G-6MF6MPCB0M"
 };
 
-// Evita duplicar a inicialização
-const app = !getApps().length
-  ? initializeApp(firebaseConfig)
-  : getApps()[0];
+// Inicialização robusta para evitar reinicialização
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 
-export const auth = getAuth(app);
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+
 export const db = getFirestore(app);
-export { serverTimestamp };
+export const storage = getStorage(app);
+export { serverTimestamp, auth };
 export default app;

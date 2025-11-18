@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { agendamentoService } from '../services/agendamentoService';
+import { auth } from '../config/firebaseConfig'; // Importar o auth
 import { styles } from '../estilos/styleScreenDataHora';
 
 const AgendamentoScreen = () => {
@@ -192,6 +193,13 @@ const AgendamentoScreen = () => {
       return;
     }
 
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      Alert.alert('Erro', 'Você precisa estar logado para fazer um agendamento.');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -216,15 +224,17 @@ const AgendamentoScreen = () => {
           preco: servico.preco,
           duracao: servico.duracao
         },
-        barbeiro: {
+        barbeiro: { // Garante que o objeto barbeiro seja salvo, não apenas o nome
           id: barbeiro.id,
           nome: barbeiro.nome,
           especialidade: barbeiro.especialidade
-        },
+        }, 
         data: selectedDate.dateString,
         horario: selectedTime,
         dataCompleta: new Date(`${selectedDate.dateString}T${selectedTime}`),
-        status: 'agendado'
+        status: 'agendado',
+        userId: currentUser.uid, // Adicionando o ID do usuário
+        userName: currentUser.displayName || currentUser.email // Adicionando o nome do usuário
       };
 
       // Salvar no Firestore
@@ -241,7 +251,7 @@ const AgendamentoScreen = () => {
         [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('Home')
+            onPress: () => navigation.navigate('PainelUsuario')
           }
         ]
       );
