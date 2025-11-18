@@ -1,6 +1,10 @@
 import React, { useState ,useEffect} from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Button, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import {collection,addDoc,getDocs} from 'firebase/firestore';
+import {db} from '../config/firebaseConfig';
+import { styles } from '../estilos/styleScreenBarbeiro';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 
 
@@ -20,25 +24,49 @@ const TelaSelecaoBarbeiro = () => {
   const [error, setError] = useState(null);
  // O serviço selecionado da tela anterior
   const { servico } = route.params; 
+  const [barbeiros, setBarbeiros] = useState([]);
   
   const [barbeiroSelecionadoId, setBarbeiroSelecionadoId] = useState(null);
-  const [barbeiros, setBarbeiros] = useState([]);
-  const imageBarbeiro = require('../../assets/barbeiro.jpg');
+  
+  const imageBarbeiro = require('../../../assets/barbeiro.jpg');
+    //³³³³³³³³³³³³³³³³³³³³³³
+   const salvarBarbeirosNoFirestore = async () => {
+    try {
+      setLoading(false);
+      const barbeirosRef = collection(db, "barbeiros");
+  
+      for (const s of dadosBarbeirosMock) {
+        await addDoc(barbeirosRef, {
+          nome: s.nome,
+          especialidade: s.especialidade,
+        });
+      }
+  
+      Alert.alert("Sucesso", "Barbeiros adicionados ao Firestore!");
+    } catch (error) {
+      console.error("Erro ao salvar Barbeiros:", error);
+      Alert.alert("Erro", "Não foi possível salvar os serviços.");
+    }
+  };
+
+
+
   
 // Função para buscar barbeiros da API DESCOMNETAR 
 
- /* const fetchBarbeiros = async () =>{
+  const fetchBarbeiros = async () =>{
       
     try{
        setLoading(true);
        setError(null);
         console.log('Buscando barbeiros...');
-        const response = await axios.get(`${API_BASE_URL}/api/barbeiros`);
-        console.log(response.status)
-        console.log('Barbeiros recebidos:', response.data);
-        setBarbeiros(response.data);
-    
-
+        const barbeirosSnapshot = await  getDocs(collection (db,'barbeiros'));
+        const barbeirosList = barbeirosSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setBarbeiros(barbeirosList);
+        setLoading (false);
 
     }catch(error){
       console.log('Erro ao buscar barbeiros:', error);
@@ -46,12 +74,13 @@ const TelaSelecaoBarbeiro = () => {
     }finally{
        setLoading(false);
     }
-  };*/
+  };
 
    // Buscar serviços quando a tela carregar
     useEffect(() => {
-     // fetchBarbeiros ();
-      setBarbeiros(dadosBarbeirosMock);
+      //salvarBarbeirosNoFirestore();
+      fetchBarbeiros ();
+      
     }, []);
   
   
@@ -115,56 +144,6 @@ const TelaSelecaoBarbeiro = () => {
 
 // ... (Estilos, apenas os novos/modificados)
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5e8c6ff' },
-  titulo: { fontSize: 18, fontWeight: 'bold', padding: 15, color: '#333' }, // Reduzido para caber o nome do serviço
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    marginHorizontal: 25,
-    marginVertical: 8,
-    backgroundColor: '#7c672eff',
-    borderRadius: 8,
-    elevation: 5, 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.22,
-    borderWidth: 4,
-    borderColor: '#251702ff',
-  },
-  selectedCard: {
-    borderColor: '#007AFF',
-    borderWidth: 2,
-  },
-  barberImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30, // Circular
-    marginRight: 15,
-    backgroundColor: '#ccc'
-  },
-  infoContainer: {
-    flex: 1,
-  },
-  nomeBarbeiro: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#fffafaff',
-  },
-  especialidade: {
-    fontSize: 20,
-    color: '#e7e3e3ff',
-    marginTop: 4,
-  },
-  checkIcon: {
-    fontSize: 24,
-    color: '#007AFF',
-    marginLeft: 10,
-    fontWeight: 'bold',
-  },
 
-});
 
 export default TelaSelecaoBarbeiro;

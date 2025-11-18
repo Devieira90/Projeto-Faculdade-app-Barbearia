@@ -5,7 +5,7 @@ import {
   FlatList, 
   TouchableOpacity, 
   StyleSheet, 
-  SafeAreaView, 
+
   ActivityIndicator,
   Alert, 
   ImageBackground
@@ -13,14 +13,21 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Footer from '../components/footer';
 import axios from 'axios';
+import {collection,addDoc,getDocs} from 'firebase/firestore';
+import {db} from '../config/firebaseConfig';
+import { styles } from '../estilos/styleScreenServicos';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-// URL base do seu servidor - IMPORTANTE ajustar conforme o ambiente
-const API_BASE_URL = 'http://192.168.1.107:3000' // Produção
+
+
 const dadosMock = [
   { id: 1, nome: 'Corte de Cabelo', duracao: 30, preco: 25.00, descricao: 'Corte tradicional masculino.' },
   { id: 2, nome: 'Barba', duracao: 15, preco: 15.00, descricao: 'Aparar e modelar a barba.' },
   { id: 3, nome: 'Corte Infantil', duracao: 25, preco: 20.00, descricao: 'Corte especial para crianças.' },
 ];
+
+
+
 
 const TelaSelecaoServico = () => {  
   const navigation = useNavigation();
@@ -29,32 +36,61 @@ const TelaSelecaoServico = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-   
-  const imageButton = require('../../assets/button02.png');
-  // Função para buscar serviços do backend
-  /*const fetchServicos = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.get(`${API_BASE_URL}/api/servicos`);
-      console.log('Serviços recebidos:', response.data);
-      setServicos(response.data);
-      setLoading(false);
-    }catch (err) {
-      console.error('Erro ao buscar serviços:', err);
-      setError('Não foi possível carregar os serviços. Verifique sua conexão.');
-      Alert.alert('Erro', 'Não foi possível carregar os serviços', fetchServicos);
-      setServicos([]); // Limpa a lista em caso de erro
+  const salvarServicosNoFirestore = async () => {
+  try {
+    setLoading(false);
+    const servicosRef = collection(db, "servicos");
+
+    for (const s of dadosMock) {
+      await addDoc(servicosRef, {
+        nome: s.nome,
+        duracao: s.duracao,
+        preco: s.preco,
+        descricao: s.descricao,
+      });
     }
-  }*/
+
+    Alert.alert("Sucesso", "Serviços adicionados ao Firestore!");
+  } catch (error) {
+    console.error("Erro ao salvar serviços:", error);
+    Alert.alert("Erro", "Não foi possível salvar os serviços.");
+  }
+};
+
+  const fetchServicos = async () => {
+      try {
+        setLoading(true);
+        const servicosSnapshot = await getDocs(collection(db, 'servicos'));
+        const servicosList = servicosSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        console.log('Serviços buscados:', servicosList);
+        setServicos(servicosList);
+        setLoading(false);
+      } catch (err) {
+        console.error('Erro ao buscar serviços:', err);
+        setError('Não foi possível carregar os serviços. Por favor, tente novamente mais tarde.');
+        setLoading(false);
+      }
+    };
+
+   
+  const imageButton = require('../../../assets/button02.png');
+
 
 
   // Buscar serviços quando a tela carregar
   useEffect(() => {
-    //fetchServicos();
-    setServicos(dadosMock);
-    setLoading(false);
-  }, []);
+  
+  
+  
+     fetchServicos();
+  
+  }
+
+   
+  , []);
 
   const handleSelectService = (serviceId) => {
     setServicoSelecionadoId(serviceId);
@@ -150,126 +186,5 @@ const TelaSelecaoServico = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#ece0b6ff' 
-  },
-  
-    gradient: {
-    borderRadius: 2,
-   // opcional
-    
-    width: '107%',
-    height: '100%',
-  },
-
-  titulo: { 
-    fontSize: 22, 
-    fontWeight: 'bold', 
-    padding: 20, 
-    color: '#3d1502ff',
-    textAlign: 'center'
-  },
-  card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 4,
-    marginHorizontal: 25,
-    marginVertical: 8,
-    backgroundColor: '#B8860B',
-    borderRadius: 12,
-    elevation: 4,
-    shadowColor: '#130f0fff',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    borderWidth: 4,
-    borderColor: '#8a6533ff',
-    
-  },
-  selectedCard: {
-    borderColor: '#007AFF',
-    borderWidth: 2,
-  },
-  infoContainer: {
-    flex: 1,
-  
-  },
-  nomeServico: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#3a2902ff',
-  },
-  detalheServico: {
-    fontSize: 14,
-    color:'#fffcf6ff',
-    marginTop: 4,
-    fontWeight: 'bold',
-  },
-  descricaoServico: {
-    fontSize: 14,
-    color: '#ffffffff',
-    marginTop: 2,
-    fontStyle: 'italic',
-    fontWeight: 'bold',
-  },
-  precoContainer: {
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingRight: 30,
-  },
-  preco: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f3eeebff',
-    alignItems: 'left',
-    marginRight: 10,
-  },
-  centerContent: {
-    flex: 1,
-    justifyContent: 'top',
-    alignItems: 'left',
-    padding: 16,
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
-  },
-  errorText: {
-    fontSize: 18,
-    color: '#ff3b30',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  errorDetail: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  retryButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  emptyContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-  },
-});
 
 export default TelaSelecaoServico;
