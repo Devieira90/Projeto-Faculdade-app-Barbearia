@@ -90,7 +90,6 @@ const GerenciarBarbeiros = () => {
           <View style={styles.card}>
             <View style={styles.info}>
               <Text style={styles.nome}>{item.nome}</Text>
-              {item.especialidade && <Text>{item.especialidade}</Text>}
             </View>
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => handleEdit(item)}><Text style={styles.edit}>Editar</Text></TouchableOpacity>

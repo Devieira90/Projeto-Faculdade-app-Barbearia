@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { collection, getDocs, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
+import { useIsFocused } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const VerAgendamentos = () => {
@@ -18,10 +19,12 @@ const VerAgendamentos = () => {
   const [agendamentos, setAgendamentos] = useState([]);
   const [loadingBarbeiros, setLoadingBarbeiros] = useState(true);
   const [loadingAgendamentos, setLoadingAgendamentos] = useState(false);
+  const isFocused = useIsFocused();
 
-  // Busca a lista de barbeiros uma vez
+  // Busca a lista de barbeiros sempre que a tela está em foco
   useEffect(() => {
     const fetchBarbeiros = async () => {
+      setLoadingBarbeiros(true);
       try {
         const barbeirosSnapshot = await getDocs(collection(db, 'barbeiros'));
         const barbeirosList = barbeirosSnapshot.docs.map(doc => ({
@@ -35,8 +38,11 @@ const VerAgendamentos = () => {
         setLoadingBarbeiros(false);
       }
     };
-    fetchBarbeiros();
-  }, []);
+
+    if (isFocused) {
+      fetchBarbeiros();
+    }
+  }, [isFocused]);
 
   // Inicia o listener para agendamentos quando um barbeiro é selecionado
   useEffect(() => {
