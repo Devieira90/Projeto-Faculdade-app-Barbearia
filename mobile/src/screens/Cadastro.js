@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import { Styles } from '../components/styles'; // Importando seus estilos globais
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../config/firebaseConfig';
@@ -40,7 +40,16 @@ export default function Cadastro({ navigation }) {
       let errorMessage = 'Ocorreu um erro ao tentar cadastrar. Tente novamente.';
 
       if (error.code === 'auth/email-already-in-use') {
-        errorMessage = 'Este e-mail já está em uso por outra conta.';
+        // Alerta interativo para e-mail já cadastrado
+        Alert.alert(
+          'E-mail já cadastrado',
+          'Este e-mail já está em uso. Deseja ir para a tela de recuperação de senha?',
+          [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'Recuperar Senha', onPress: () => navigation.navigate('ForgotPassword', { email: email }) },
+          ]
+        );
+        return; // Retorna para não mostrar o alerta genérico
       } else if (error.code === 'auth/invalid-email') {
         errorMessage = 'O formato do e-mail é inválido.';
       } else if (error.code === 'auth/weak-password') {
@@ -55,6 +64,10 @@ export default function Cadastro({ navigation }) {
 
   return (
     <View style={localStyles.container}>
+      <Image
+        source={require('../../../assets/logo.png')}
+        style={[localStyles.logo, { width: 300, height: 120 }]}
+      />
       <Text style={localStyles.title}>Crie sua Conta</Text>
 
       <TextInput
@@ -104,7 +117,12 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f5e8c6ff',
+  },
+  logo: {
+    
+    marginBottom: 20,
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 28,
@@ -131,8 +149,8 @@ const localStyles = StyleSheet.create({
     color: '#555',
     fontSize: 16,
     textDecorationLine: 'underline',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
   }
 });
+
+// Estilo para o botão global em Styles.button
+// buttonDisabled: { backgroundColor: '#a89a74' }

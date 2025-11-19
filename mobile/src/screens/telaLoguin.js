@@ -7,13 +7,15 @@ import {
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { styles } from '../estilos/styleScreenLogin';
+
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -67,10 +69,14 @@ const LoginScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: '#f5e8c6ff' }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       {...(isWeb ? { className: 'login-container' } : {})}
     >
+      <Image
+        source={require('../../../assets/logo.png')}
+        style={[styles.logo, { width: 300, height: 120 }]} // Ajuste o tamanho aqui
+      />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Bem-vindo!</Text>
       </View>
@@ -106,7 +112,9 @@ const LoginScreen = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ForgotPassword')}
+      >
         <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
       </TouchableOpacity>
 

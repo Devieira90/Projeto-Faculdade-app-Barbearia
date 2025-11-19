@@ -115,7 +115,7 @@ const FormServico = () => {
           {loading ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : (
-            <Button title="Salvar" onPress={handleSave} />
+            <Button title="Salvar" onPress={handleSave} color="#7c672eff" />
           )}
         </View>
       </ScrollView>
@@ -124,7 +124,7 @@ const FormServico = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#f5e8c6ff' },
   form: { padding: 20 },
   label: { fontSize: 16, marginBottom: 5, color: '#333' },
   input: { backgroundColor: '#fff', padding: 10, borderRadius: 5, marginBottom: 15, borderWidth: 1, borderColor: '#ddd' },

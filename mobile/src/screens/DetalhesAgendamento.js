@@ -92,7 +92,7 @@ const DetalhesAgendamento = () => {
         <View style={styles.detailsContainer}>
           <View style={styles.infoRow}>
             <Icon name="person" size={20} color="#555" />
-            <Text style={styles.infoText}>Barbeiro: {agendamento.barbeiro?.nome}</Text>
+            <Text style={styles.infoText}>Barbeiro: {agendamento.barbeiro?.nome || agendamento.barbeiroNome || 'Não informado'}</Text>
           </View>
           <View style={styles.infoRow}>
             <Icon name="event" size={20} color="#555" />
@@ -121,7 +121,7 @@ const DetalhesAgendamento = () => {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#f5e8c6ff' },
   header: { padding: 20, backgroundColor: '#7c672eff', alignItems: 'center' },
   title: { fontSize: 24, fontWeight: 'bold', color: '#fff' },
   price: { fontSize: 18, color: '#f5e8c6ff', marginTop: 5 },

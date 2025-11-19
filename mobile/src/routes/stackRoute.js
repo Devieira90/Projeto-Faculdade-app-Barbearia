@@ -18,6 +18,7 @@ import FormServico from '../screens/FormServico'; // Importando o formulário
 import FormBarbeiro from '../screens/FormBarbeiro';
 import VerAgendamentos from '../screens/VerAgendamentos'; // Importando a tela de agendamentos
 import DetalhesAgendamento from '../screens/DetalhesAgendamento'; // Importando a nova tela
+import ForgotPasswordScreen from '../screens/ForgotPassword'; // Importando a tela de esqueci a senha
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { ActivityIndicator, View } from 'react-native';
@@ -46,6 +47,7 @@ const AuthStack = () => (
   <Stack.Navigator screenOptions={{ presentation: 'modal', headerShown: false }}>
     <Stack.Screen name="LoginModal" component={LoginScreen} />
     <Stack.Screen name="Register" component={CadastroScreen} />
+    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     <Stack.Screen name="AdminLogin" component={AdminLogin} options={{ headerShown: true, title: 'Login do Admin' }} />
   </Stack.Navigator>
 );

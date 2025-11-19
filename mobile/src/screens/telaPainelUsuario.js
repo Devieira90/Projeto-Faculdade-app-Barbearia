@@ -153,15 +153,15 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <Text style={styles.titulo}>appBarbearia</Text>
-          <Text style={styles.nomeUsuario}>{nomeUsuario || user?.email}</Text>
+          <Text style={styles.titulo}>SHARPCUT</Text>
+          <Text style={styles.nomeUsuario}>{nomeUsuario || user?.email || 'Bem-vindo!'}</Text>
         </View>
         
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
            <Text style={{ color: '#FFF' }}>Sair</Text>
         </TouchableOpacity>
       </View>
-
+      
       {/* Conteúdo Principal */}
       <ScrollView
         refreshControl={
@@ -171,7 +171,7 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
         <View style={styles.content}>
           <View style={styles.sectionHeader}>
             <Text style={styles.subtitulo}>Seus Agendamentos</Text>
-            <TouchableOpacity onPress={onRefresh}>
+            <TouchableOpacity onPress={onRefresh} style={styles.refreshButton}>
               <Icon name="refresh" size={20} color="#007AFF" />
             </TouchableOpacity>
           </View>
@@ -179,7 +179,7 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
           {loading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="#007AFF" />
-              <Text style={styles.loadingText}>Carregando agendamentos...</Text>
+              <Text style={styles.loadingText}>Carregando seus agendamentos...</Text>
             </View>
           ) : agendamentos.length === 0 ? (
             <View style={styles.emptyState}>
@@ -211,10 +211,12 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
                       <Text style={styles.cardTitulo}>{item.servico?.nome || 'Serviço não informado'}</Text>
                       <View style={[
                         styles.statusIndicator,
-                        { backgroundColor: new Date(item.data) >= new Date() ? '#4CAF50' : '#9E9E9E' }
+                        { 
+                          backgroundColor: new Date(item.data.split('-').join('/')) >= new Date() ? '#4CAF50' : '#9E9E9E'
+                        }
                       ]}>
                         <Text style={styles.statusText}>
-                          {new Date(item.data) >= new Date() ? 'Agendado' : 'Realizado'}
+                          {new Date(item.data.split('-').join('/')) >= new Date() ? 'Agendado' : 'Realizado'}
                         </Text>
                       </View>
                     </View>
@@ -222,7 +224,7 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
                     <View style={styles.cardContent}>
                       <View style={styles.infoRow}>
                         <Icon name="person" size={16} color="#666" />
-                        <Text style={styles.cardTexto}>Barbeiro: {item.barbeiro?.nome || 'Não informado'}</Text>
+                        <Text style={styles.cardTexto}>Barbeiro: {item.barbeiro?.nome || item.barbeiroNome || 'Não informado'}</Text>
                       </View>
                       
                       <View style={styles.infoRow}>

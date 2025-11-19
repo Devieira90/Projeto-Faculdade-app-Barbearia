@@ -25,7 +25,7 @@ export default function TelaMaps() {
           coordinate={cordenates} // Posição do marcador
           title={"appBarbearia"} // Título que aparece ao clicar
           description={"Localização da appBarbearia"} // Descrição opcional
-          pinColor="blue" // Define a cor do pino. Você pode usar "red", "green", "blue", etc.
+          pinColor="#7c672eff" // Define a cor do pino para o dourado do tema
         />
       </Map>
     </View>
