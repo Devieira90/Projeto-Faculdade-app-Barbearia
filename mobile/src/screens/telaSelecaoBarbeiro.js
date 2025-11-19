@@ -28,7 +28,7 @@ const TelaSelecaoBarbeiro = () => {
   
   const [barbeiroSelecionadoId, setBarbeiroSelecionadoId] = useState(null);
   
-  const imageBarbeiro = require('../../../assets/barbeiro.jpg');
+  const imageBarbeiro = require('../../../assets/logo.png');
     //³³³³³³³³³³³³³³³³³³³³³³
    const salvarBarbeirosNoFirestore = async () => {
     try {
@@ -114,7 +114,7 @@ const TelaSelecaoBarbeiro = () => {
       >
         <Image 
           source={imageBarbeiro} 
-          style={styles.barberImage} 
+          style={[styles.barberImage, { width: 80, height: 80, borderRadius: 40 }]} 
         />
         <View style={styles.infoContainer}>
           <Text style={styles.nomeBarbeiro}>{item.nome}</Text>
@@ -128,7 +128,7 @@ const TelaSelecaoBarbeiro = () => {
   return (
     <SafeAreaView style={styles.container}>
       
-      <Text style={styles.titulo}>PROFICIONAL :</Text>
+      <Text style={styles.titulo}>PROFISSIONAL :</Text>
       
       <FlatList
         data={barbeiros}

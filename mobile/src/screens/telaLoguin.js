@@ -7,18 +7,28 @@ import {
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { styles } from '../estilos/styleScreenLogin';
-const LoginScreen = ({ onLogin }) => {  // <-- RECEBE A FUNÇÃO PARA FECHAR O MODAL
+
+const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+  // Efeito para resetar o estado de loading quando a tela recebe foco
+  React.useEffect(() => {
+    if (isFocused) {
+      setLoading(false);
+    }
+  }, [isFocused]);
 
   const handleLogin = async () => {
     if (email === '' || password === '') {
@@ -33,12 +43,7 @@ const LoginScreen = ({ onLogin }) => {  // <-- RECEBE A FUNÇÃO PARA FECHAR O M
 
       console.log('Usuário logado:', userCredential.user.email);
 
-      // ⛔ NÃO NAVEGA PARA "Home" AQUI
-      // ✔ FECHA O MODAL E ENTRA NO APP
-      onLogin();
-
-      
-
+      // A navegação será tratada automaticamente pelo listener em AppRoute
     } catch (error) {
       setLoading(false);
 
@@ -64,10 +69,14 @@ const LoginScreen = ({ onLogin }) => {  // <-- RECEBE A FUNÇÃO PARA FECHAR O M
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: '#f5e8c6ff' }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       {...(isWeb ? { className: 'login-container' } : {})}
     >
+      <Image
+        source={require('../../../assets/logo.png')}
+        style={[styles.logo, { width: 300, height: 120 }]} // Ajuste o tamanho aqui
+      />
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Bem-vindo!</Text>
       </View>
@@ -103,7 +112,9 @@ const LoginScreen = ({ onLogin }) => {  // <-- RECEBE A FUNÇÃO PARA FECHAR O M
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ForgotPassword')}
+      >
         <Text style={styles.forgotPassword}>Esqueceu a senha?</Text>
       </TouchableOpacity>
 
@@ -112,6 +123,12 @@ const LoginScreen = ({ onLogin }) => {  // <-- RECEBE A FUNÇÃO PARA FECHAR O M
       >
         <Text style={styles.forgotPassword}>Ainda Não Sou Cadastrado</Text>
       </TouchableOpacity>
+
+      {/* Botão para login de admin */}
+      <TouchableOpacity
+        style={{ marginTop: 20 }}
+        onPress={() => navigation.navigate('AdminLogin')}
+      ><Text style={[styles.forgotPassword, { textDecorationLine: 'underline' }]}>Acesso Administrativo</Text></TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };

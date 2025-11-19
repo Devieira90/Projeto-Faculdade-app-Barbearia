@@ -12,6 +12,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { agendamentoService } from '../services/agendamentoService';
+import { auth, db } from '../config/firebaseConfig'; // Importar o auth e o db
+import { doc, getDoc } from 'firebase/firestore'; // Importar getDoc
 import { styles } from '../estilos/styleScreenDataHora';
 
 const AgendamentoScreen = () => {
@@ -192,7 +194,22 @@ const AgendamentoScreen = () => {
       return;
     }
 
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      Alert.alert('Erro', 'Você precisa estar logado para fazer um agendamento.');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
+
+    // Busca o nome do usuário no Firestore
+    let nomeUsuario = currentUser.email; // Fallback para o email
+    const userDocRef = doc(db, "users", currentUser.uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      nomeUsuario = userDocSnap.data().nome;
+    }
 
     try {
       // Verificar disponibilidade novamente antes de confirmar
@@ -216,15 +233,17 @@ const AgendamentoScreen = () => {
           preco: servico.preco,
           duracao: servico.duracao
         },
-        barbeiro: {
+        barbeiro: { // Garante que o objeto barbeiro seja salvo, não apenas o nome
           id: barbeiro.id,
           nome: barbeiro.nome,
           especialidade: barbeiro.especialidade
-        },
+        }, 
         data: selectedDate.dateString,
         horario: selectedTime,
         dataCompleta: new Date(`${selectedDate.dateString}T${selectedTime}`),
-        status: 'agendado'
+        status: 'agendado',
+        userId: currentUser.uid, // Adicionando o ID do usuário
+        userName: nomeUsuario // Adicionando o nome do usuário
       };
 
       // Salvar no Firestore
@@ -241,7 +260,7 @@ const AgendamentoScreen = () => {
         [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('Home')
+            onPress: () => navigation.navigate('PainelUsuario')
           }
         ]
       );

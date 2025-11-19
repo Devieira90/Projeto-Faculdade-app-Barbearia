@@ -19,19 +19,17 @@ import { StyleSheet } from 'react-native';
     marginHorizontal: 5,
     borderRadius: 15,
     backgroundColor:'blue',
-    color :'red',
     alignItems:"center",
     justifyContent:"center",
     width:"50%",
     height:60,
-    hadowOffset: {
+    shadowOffset: {
       width: 7,
-      height: 7, // Deslocamento vertical da sombra (4 pixels para baixo)
+      height: 7,
     },
-    shadowOpacity: 0, // Opacidade da sombra (0 a 1)
-    shadowRadius: 4.65, // Raio do desfoque da sombra
+    shadowOpacity: 0.4,
+    shadowRadius: 4.65,
 
-    // Para Android (Elevation)
     elevation: 8, // Nível de elevação da sombra (número inteiro)
     
   },
@@ -40,7 +38,6 @@ import { StyleSheet } from 'react-native';
     color:"#dd0",
     fontSize:25,
     justifyContent:"center",
-    boxShadow:"4px",
     fontWeight:"bold"
 
   },

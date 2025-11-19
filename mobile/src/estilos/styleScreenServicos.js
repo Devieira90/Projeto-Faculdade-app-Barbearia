@@ -1,123 +1,125 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: '#ece0b6ff' 
-  },
-  
-    gradient: {
-    borderRadius: 2,
-   // opcional
-    
-    width: '107%',
-    height: '100%',
-  },
-
-  titulo: { 
-    fontSize: 22, 
-    fontWeight: 'bold', 
-    padding: 20, 
-    color: '#3d1502ff',
-    textAlign: 'center'
-  },
-  card: {
+  // Estilos do Cabeçalho
+  headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 4,
-    marginHorizontal: 25,
-    marginVertical: 8,
-    backgroundColor: '#B8860B',
-    borderRadius: 12,
-    elevation: 4,
-    shadowColor: '#130f0fff',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    borderWidth: 4,
-    borderColor: '#8a6533ff',
-    
+    alignItems: 'center',
+    paddingHorizontal: 15, // Reduzido para aproximar o botão da borda
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    backgroundColor: '#FDF5E6', // Cor de fundo do container
   },
-  selectedCard: {
-    borderColor: '#007AFF',
-    borderWidth: 2,
+  headerButton: {
+    padding: 8, // Aumenta a área de toque
   },
-  infoContainer: {
+  titulo: {
+    fontSize: 22, // Levemente reduzido para caber melhor
+    fontWeight: 'bold',
+    color: '#333',
+  },
+
+  // Estilos do Conteúdo
+  container: {
     flex: 1,
-  
-  },
-  nomeServico: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#3a2902ff',
-  },
-  detalheServico: {
-    fontSize: 14,
-    color:'#fffcf6ff',
-    marginTop: 4,
-    fontWeight: 'bold',
-  },
-  descricaoServico: {
-    fontSize: 14,
-    color: '#ffffffff',
-    marginTop: 2,
-    fontStyle: 'italic',
-    fontWeight: 'bold',
-  },
-  precoContainer: {
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingRight: 30,
-  },
-  preco: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#f3eeebff',
-    alignItems: 'left',
-    marginRight: 10,
+    backgroundColor: '#FDF5E6',
   },
   centerContent: {
     flex: 1,
-    justifyContent: 'top',
-    alignItems: 'left',
-    padding: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     marginTop: 10,
-    fontSize: 16,
     color: '#666',
   },
   errorText: {
     fontSize: 18,
-    color: '#ff3b30',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 8,
+    color: '#d9534f',
+    marginBottom: 10,
   },
   errorDetail: {
-    fontSize: 14,
     color: '#666',
     textAlign: 'center',
     marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#D4AF37',
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    paddingVertical: 12,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: 'white',
+    color: '#121212',
     fontWeight: 'bold',
-    fontSize: 16,
+  },
+  card: {
+    backgroundColor: '#D4AF37',
+    borderRadius: 12,
+    marginHorizontal: 20,
+    marginBottom: 15,
+    padding: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    borderWidth: 2,
+    borderColor: 'transparent', // Borda transparente por padrão
+  },
+  cardSelected: {
+    borderColor: '#D4AF37', // Borda dourada quando selecionado
+    shadowColor: '#D4AF37',
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  serviceImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 15,
+  },
+  infoContainer: {
+    flex: 1,
+    marginRight: 10,
+  },
+  nomeServico: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5,
+  },
+  detalheServico: {
+    fontSize: 14,
+    color: '#777',
+    marginBottom: 8,
+  },
+  descricaoServico: {
+    fontSize: 14,
+    color: '#555',
+    fontStyle: 'italic',
+  },
+  precoContainer: {
+    alignItems: 'flex-end',
+  },
+  preco: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#D4AF37',
   },
   emptyContainer: {
-    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 50,
   },
   emptyText: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: '#888',
   },
 });
