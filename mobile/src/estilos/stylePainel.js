@@ -1,9 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff3caff', // Fundo dourado claro (bege)
+    backgroundColor: '#ece0b6ff',
   },
   header: {
     flexDirection: 'row',
@@ -11,91 +13,100 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#D4AF37', // Dourado como cor principal do header
-    borderBottomWidth: 1,
-    borderBottomColor: '#C09E2B', // Tom de dourado mais escuro para a borda
+    backgroundColor:  '#8a6533ff',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   headerLeft: {
-    flexDirection: 'column',
+    flex: 1,
   },
   titulo: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#121212', // Texto escuro para contraste
+    color: '#FFF',
   },
   nomeUsuario: {
-    fontSize: 16,
-    color: '#333333', // Texto escuro para contraste
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.8)',
+    marginTop: 4,
   },
   logoutButton: {
     padding: 8,
-    borderRadius: 5,
-    backgroundColor: 'transparent',
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    marginLeft: 10,
   },
   content: {
+    flex: 1,
     padding: 20,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 20,
   },
   subtitulo: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333333', // Texto escuro
+    color: '#333',
   },
   loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    justifyContent: 'center',
+    padding: 40,
   },
   loadingText: {
     marginTop: 10,
+    color: '#666',
     fontSize: 16,
-    color: '#666666',
   },
   emptyState: {
-    justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 50,
+    justifyContent: 'center',
+    padding: 40,
   },
   semAgendamento: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#666666',
-    marginTop: 15,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 16,
+    fontWeight: '600',
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#888888',
-    marginTop: 5,
+    color: '#999',
     textAlign: 'center',
+    marginTop: 8,
+    marginBottom: 20,
   },
   botaoAgendar: {
-    marginTop: 20,
-    backgroundColor: '#D4AF37', // Dourado
+    backgroundColor: '#709254ff',
+    paddingHorizontal: 24,
     paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 8,
+    borderRadius: 25,
+    elevation: 4,
   },
   textAgendar: {
-    color: '#121212',
+    color: '#FFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   card: {
-    backgroundColor: '#FFFFFF', // Fundo branco para os cards
-    borderRadius: 10,
-    marginBottom: 15,
-    overflow: 'hidden',
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowRadius: 3,
   },
   firstCard: {
     marginTop: 0,
@@ -107,121 +118,63 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEEEE', // Borda clara
+    marginBottom: 12,
   },
   cardTitulo: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#333333', // Texto escuro
+    color: '#333',
+    flex: 1,
   },
   statusIndicator: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   statusText: {
-    color: '#121212',
+    color: '#FFF',
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   cardContent: {
-    padding: 15,
+    gap: 8,
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    gap: 8,
   },
   cardTexto: {
     fontSize: 14,
-    color: '#555555', // Texto cinza médio
-    marginLeft: 8,
+    color: '#666',
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
+    padding: 20,
+    gap: 12,
     borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    backgroundColor: '#D4AF37', // Fundo branco para o rodapé
+    borderTopColor: '#E5E5E5',
+    backgroundColor:   '#ece0b6ff',
   },
   botao: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 20,
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+    elevation: 4,
   },
   botaoHome: {
-    backgroundColor: '#525252ff', // Dourado
+    backgroundColor: '#bd9560ff',
   },
   botaoLocal: {
-    backgroundColor: '#525252ff',
-    borderWidth: 1,
-    borderColor: '#D4AF37',
+    backgroundColor: '#bd9560ff',
   },
-  // --- Estilos do Modal ---
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: '#FFFFFF', // Fundo branco para o modal
-    borderRadius: 20,
-    padding: 25,
-    alignItems: 'stretch',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: '90%',
-  },
-  modalTitle: {
-    marginBottom: 20,
-    textAlign: 'center',
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333333', // Texto escuro
-  },
-  modalDetailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  modalText: {
+  textBotao: {
+    color: '#FFF',
     fontSize: 16,
-    marginLeft: 15,
-    color: '#444444', // Texto escuro
-    flexShrink: 1, // Permite que o texto quebre a linha se for muito longo
-  },
-  modalButton: {
-    borderRadius: 10,
-    padding: 15,
-    elevation: 2,
-    marginTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  modalButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  closeButton: {
-    backgroundColor: '#6c757d', // Cinza
-  },
-  cancelButton: {
-    backgroundColor: '#d9534f', // Vermelho (mantido para ações de perigo)
+    fontWeight: '600',
   },
 });

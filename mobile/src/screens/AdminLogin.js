@@ -70,7 +70,7 @@ const AdminLogin = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#f5e8c6ff' },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#333', marginBottom: 10 },
+  title: { fontSize: 28, fontWeight: 'bold', color: '#3e3535ff', marginBottom: 10 },
   subtitle: { fontSize: 18, color: '#555', marginBottom: 40 },
   inputContainer: { width: '100%', marginBottom: 20 },
   input: { backgroundColor: '#fff', paddingHorizontal: 15, paddingVertical: 15, borderRadius: 10, marginBottom: 15, fontSize: 16, borderWidth: 1, borderColor: '#ddd' },
