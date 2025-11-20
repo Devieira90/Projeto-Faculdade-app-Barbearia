@@ -83,6 +83,7 @@ const GerenciarServicos = () => {
         <Button
           title="Adicionar Novo"
           onPress={() => navigation.navigate('FormServico')} // Navega para o formulário para criar um novo
+          color="#7c672eff"
         />
       </View>
       <FlatList
@@ -108,14 +109,14 @@ const GerenciarServicos = () => {
 
 // Adicione estilos básicos ou crie um novo arquivo de estilo
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10 },
+  container: { flex: 1, padding: 10, backgroundColor: '#f5e8c6ff' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   title: { fontSize: 22, fontWeight: 'bold' },
   card: { flexDirection: 'row', justifyContent: 'space-between', padding: 15, marginVertical: 5, backgroundColor: '#fff', borderRadius: 5, elevation: 2 },
   info: { flex: 1, justifyContent: 'center' },
   nome: { fontSize: 18, fontWeight: 'bold' },
   actions: { flexDirection: 'column', justifyContent: 'space-around' },
-  edit: { color: 'blue', marginBottom: 10 },
+  edit: { color: '#7c672eff', marginBottom: 10, fontWeight: 'bold' },
   delete: { color: 'red' },
 });
 

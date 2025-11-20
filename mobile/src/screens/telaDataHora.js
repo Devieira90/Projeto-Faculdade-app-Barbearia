@@ -12,7 +12,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { agendamentoService } from '../services/agendamentoService';
-import { auth } from '../config/firebaseConfig'; // Importar o auth
+import { auth, db } from '../config/firebaseConfig'; // Importar o auth e o db
+import { doc, getDoc } from 'firebase/firestore'; // Importar getDoc
 import { styles } from '../estilos/styleScreenDataHora';
 
 const AgendamentoScreen = () => {
@@ -202,6 +203,14 @@ const AgendamentoScreen = () => {
 
     setLoading(true);
 
+    // Busca o nome do usuário no Firestore
+    let nomeUsuario = currentUser.email; // Fallback para o email
+    const userDocRef = doc(db, "users", currentUser.uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      nomeUsuario = userDocSnap.data().nome;
+    }
+
     try {
       // Verificar disponibilidade novamente antes de confirmar
       const disponivel = await agendamentoService.verificarHorarioDisponivel(
@@ -234,7 +243,7 @@ const AgendamentoScreen = () => {
         dataCompleta: new Date(`${selectedDate.dateString}T${selectedTime}`),
         status: 'agendado',
         userId: currentUser.uid, // Adicionando o ID do usuário
-        userName: currentUser.displayName || currentUser.email // Adicionando o nome do usuário
+        userName: nomeUsuario // Adicionando o nome do usuário
       };
 
       // Salvar no Firestore

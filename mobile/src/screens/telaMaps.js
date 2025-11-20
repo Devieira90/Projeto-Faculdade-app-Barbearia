@@ -48,15 +48,15 @@ export default function TelaMaps(){
         initialRegion={{
           latitude: cordenates.latitude,
           longitude:cordenates.longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001,
         }}
       >
         {/* Adiciona o componente Marker dentro do Map */}
         <Marker 
           coordinate={cordenates} // Posição do marcador
           title={"SharpCut"} // Título que aparece ao clicar
-          description={"Localização da Barbearia"} // Descrição opcional
+          description={"Localização da appBarbearia"} // Descrição opcional
           pinColor="brown" // Define a cor do pino. Você pode usar "red", "green", "blue", etc.
         />
       </Map>
