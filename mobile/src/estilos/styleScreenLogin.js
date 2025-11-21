@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   button: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#7c672eff',
     width: '100%',
     padding: 15,
     borderRadius: 8,

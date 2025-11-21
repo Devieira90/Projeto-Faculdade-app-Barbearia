@@ -18,7 +18,7 @@ import { StyleSheet } from 'react-native';
     paddingBottom: 4,
     marginHorizontal: 5,
     borderRadius: 15,
-    backgroundColor:'blue',
+    backgroundColor:'#7c672eff',
     alignItems:"center",
     justifyContent:"center",
     width:"50%",
@@ -35,7 +35,7 @@ import { StyleSheet } from 'react-native';
   },
 
   buttonText:{
-    color:"#dd0",
+    color:"rgba(255, 255, 255, 1)",
     fontSize:25,
     justifyContent:"center",
     fontWeight:"bold"
