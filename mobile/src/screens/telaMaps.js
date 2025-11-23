@@ -1,7 +1,7 @@
 import { View ,StyleSheet,TouchableOpacity,Text,Platform,Alert,Linking} from "react-native";
 import React from "react";
 // Importe o componente Marker
-import Map, { Marker,Callout } from 'react-native-maps' 
+import{MapView,Marker}from 'expo-maps' 
 
 const cordenates = {
   latitude: -22.678516784947625, 
@@ -43,7 +43,7 @@ export default function TelaMaps(){
 
   return (
     <View style={styles.container}>
-      <Map 
+      <MapView 
         style={styles.map}
         initialRegion={{
           latitude: cordenates.latitude,
@@ -59,7 +59,7 @@ export default function TelaMaps(){
           description={"Localização da appBarbearia"} // Descrição opcional
           pinColor="brown" // Define a cor do pino. Você pode usar "red", "green", "blue", etc.
         />
-      </Map>
+      </MapView>
 
       <TouchableOpacity
         style={{
