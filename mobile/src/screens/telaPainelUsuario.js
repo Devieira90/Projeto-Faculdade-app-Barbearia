@@ -216,24 +216,24 @@ const TelaPainelUsuario = ({ navigation, onLogout }) => {
                         }
                       ]}>
                         <Text style={styles.statusText}>
-                          {new Date(item.data.split('-').join('/')) >= new Date() ? 'Agendado' : 'Realizado'}
+                          {new Date(item.data.split('-').join('/')) >= new Date() ? 'Realizado' : 'Agendado'}
                         </Text>
                       </View>
                     </View>
                     
                     <View style={styles.cardContent}>
                       <View style={styles.infoRow}>
-                        <Icon name="person" size={16} color="#666" />
+                        <Icon name="person" size={16} color="white" />
                         <Text style={styles.cardTexto}>Barbeiro: {item.barbeiro?.nome || item.barbeiroNome || 'Não informado'}</Text>
                       </View>
                       
                       <View style={styles.infoRow}>
-                        <Icon name="event" size={16} color="#666" />
+                        <Icon name="event" size={16} color="white" />
                         <Text style={styles.cardTexto}>Data: {formatarData(item.data)}</Text>
                       </View>
                       
                       <View style={styles.infoRow}>
-                        <Icon name="schedule" size={16} color="#666" />
+                        <Icon name="schedule" size={16} color="white" />
                         <Text style={styles.cardTexto}>Hora: {item.horario}</Text>
                       </View>
                     </View>

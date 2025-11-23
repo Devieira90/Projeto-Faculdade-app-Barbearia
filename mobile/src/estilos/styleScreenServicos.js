@@ -57,6 +57,7 @@ export const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#D4AF37',
+    margin: 10,
     borderRadius: 12,
     marginHorizontal: 20,
     marginBottom: 15,
@@ -69,8 +70,8 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
-    borderWidth: 2,
-    borderColor: 'transparent', // Borda transparente por padrão
+    borderWidth: 4,
+    borderColor: '#251702ff', // Borda transparente por padrão
   },
   cardSelected: {
     borderColor: '#D4AF37', // Borda dourada quando selecionado

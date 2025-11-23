@@ -98,7 +98,7 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   card: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#98af85ff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -107,6 +107,7 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
+    fontWeight : 'b',
   },
   firstCard: {
     marginTop: 0,
@@ -130,6 +131,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
+    
   },
   statusText: {
     color: '#FFF',
@@ -146,13 +148,14 @@ export const styles = StyleSheet.create({
   },
   cardTexto: {
     fontSize: 14,
-    color: '#666',
+    color: '#22692eff',
+    fontWeight:'bold'
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     gap: 12,
-    borderTopWidth: 1,
+    
     borderTopColor: '#E5E5E5',
     backgroundColor:   '#ece0b6ff',
   },

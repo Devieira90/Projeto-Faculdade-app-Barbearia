@@ -1,86 +1,74 @@
-import { View ,StyleSheet,TouchableOpacity,Text,Platform,Alert,Linking} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Platform, Alert, Linking } from "react-native";
 import React from "react";
-// Importe o componente Marker
-import{MapView,Marker}from 'expo-maps' 
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'; // <-- IMPORT CORRETO
 
 const cordenates = {
-  latitude: -22.678516784947625, 
-  longitude:-43.275092275558144,
-}
+  latitude: -22.678516784947625,
+  longitude: -43.275092275558144,
+};
 
-export default function TelaMaps(){
+export default function TelaMaps() {
 
-     const handleMarkerPress= async () => {
-    // Lógica para quando o marcador for pressionado
+  const handleMarkerPress = async () => {
     console.log("Marcador pressionado!");
 
-   
     const scheme = Platform.select({
       ios: 'maps:0,0?q=',
-      android: 'geo:0,0?q=' 
-    })
+      android: 'geo:0,0?q='
+    });
+
     const latLng = `${cordenates.latitude},${cordenates.longitude}`;
-    const label = 'Charpcut ';
+    const label = 'SharpCut';
     const url = Platform.select({
       ios: `${scheme}${label}@${latLng}`,
       android: `${scheme}${latLng}(${label})`
     });
 
-    if(!url){
-      return Alert.alert('Nao foi possivel abrir o Mapas');
-
+    if (!url) {
+      return Alert.alert('Não foi possível abrir o Mapas');
     }
 
-    const canOpen =  await Linking.canOpenURL(url);
+    const canOpen = await Linking.canOpenURL(url);
 
-    if(canOpen){
+    if (canOpen) {
       Linking.openURL(url);
-    }else{
-      Alert.alert('Nao foi possivel abrir o Mapas');
+    } else {
+      Alert.alert('Não foi possível abrir o Mapas');
     }
   }
-  
+
+  // Adicione isso temporariamente para testar
+console.log('API Key:', 'AIzaSyBZnZJii7NAyHme882Ja_8AWkDKBt7JyJk');
+console.log('Provider:', PROVIDER_GOOGLE);
 
   return (
+    
     <View style={styles.container}>
-      <MapView 
+  
+      <MapView
+        provider={PROVIDER_GOOGLE}   // <-- AQUI! NECESSÁRIO
         style={styles.map}
         initialRegion={{
           latitude: cordenates.latitude,
-          longitude:cordenates.longitude,
+          longitude: cordenates.longitude,
           latitudeDelta: 0.001,
           longitudeDelta: 0.001,
         }}
       >
-        {/* Adiciona o componente Marker dentro do Map */}
-        <Marker 
-          coordinate={cordenates} // Posição do marcador
-          title={"SharpCut"} // Título que aparece ao clicar
-          description={"Localização da appBarbearia"} // Descrição opcional
-          pinColor="brown" // Define a cor do pino. Você pode usar "red", "green", "blue", etc.
+        <Marker
+          coordinate={cordenates}
+          title={"SharpCut"}
+          description={"Localização da barbearia"}
+          pinColor="brown"
         />
       </MapView>
 
       <TouchableOpacity
-        style={{
-          position: 'absolute',
-          top: 850,
-          left: 20,
-          backgroundColor: 'black',
-          padding: 10,
-          borderRadius: 8,
-          elevation: 5,
-          width:'90%',
-          height:60,
-          
-        }}
-        onPress={() => {
-          // Ação ao pressionar o botão (ex: navegar para outra tela)
-          handleMarkerPress();
-        }}
+        style={styles.button}
+        onPress={handleMarkerPress}
         activeOpacity={0.7}
       >
-        <Text style={{ color: 'white', fontSize: 20,textAlign: 'center', marginTop:4,fontWeight:'bold'}}>
+        <Text style={styles.buttonText}>
           Como Chegar
         </Text>
       </TouchableOpacity>
@@ -94,5 +82,25 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+    width: '100%',
+    height: '100%',
   },
+  button: {
+    position: 'absolute',
+    bottom: 60,
+    left: 20,
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 8,
+    elevation: 5,
+    width: '90%',
+    height: 60,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  }
 });

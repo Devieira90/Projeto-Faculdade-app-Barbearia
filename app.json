@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MeuApp",
+    "name": "SharpCut",
     "slug": "MeuApp",
     "version": "1.0.2",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,17 +19,23 @@
     "android": {
       "versionCode": 4,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/barbeiro.png",
         "backgroundColor": "#ffffff"
+
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.MeuApp"
+      "package": "com.anonymous.MeuApp",
+          "config": {
+        "googleMaps": {
+          "apiKey":  "AIzaSyBZnZJii7NAyHme882Ja_8AWkDKBt7JyJk "
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-maps"
+      "react-native-maps"
     ],
     "extra": {
       "eas": {
